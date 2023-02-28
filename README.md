@@ -1,3 +1,19 @@
+# SEAMS Participants Note
+
+This version of the analysis leans into some additional workspace tools and organization that you may wish to consider.
+
+Most scientific work entails a series of steps, where steps depend on the output of previous stages (and the code that executes them), and when some inputs change, we wish to re-run the downstream analyses.
+
+There are many tools designed to address that general problem. In this branch, we demonstrate using a tool that has been around a long time: gnu[make](https://www.gnu.org/software/make/manual/make.html).
+
+It's also common to have multiple branches of an overall analysis, and to want to have intermediate outputs in addition to final results figures (e.g. for tables or as data products in a publication). To do that approach, it's useful to break up scripts to have essentially a 1-script, 1-output mapping.
+
+It's also common to want to perform the same analysis, but on different input data and stored to a different output location. To enable that approach, you generally want scripts to take arguments (e.g. for the input files they use, for the output file they create).
+
+While not strictly necessary for this example work, the revisions in this branch show how to use the base R tools to accomplish this. Other languages have similar libraries or idioms for capturing arguments and acting on them.
+
+Overall, these changes makes the approach more flexible (you can do the analysis for most any ISO3n country code) and makes it a bit more portable (your collaborators can locally define where they want to put things).
+
 # Case Fatality Ratio (CFR) Analysis  
   
 ## Overview  
