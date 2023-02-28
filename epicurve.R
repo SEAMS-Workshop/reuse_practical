@@ -4,6 +4,8 @@ require(data.table)
 d = fread('owid-rsa.csv')
 #owid_rsa = d[iso_code=='ZAF',]
 
+d$date = as.Date(d$date) # plotting won't work unless dates are cast as dates
+
 png('Rplot.png', width=2400, height=1600, res=240)
 par(mfrow=c(3,1), mar=c(2,4,1,1))
 plot(d$date, d$new_cases_per_million, type='l', xlab='Date', ylab='Reported cases')
@@ -17,7 +19,6 @@ d$cfr = d$new_deaths_smoothed_per_million/d$new_cases_smoothed_per_million
 plot(d$date, d$cfr, type='l', xlab='Date', ylab='CFR')
 dev.off()
 
-d$date = as.Date(d$date) # plotting won't work unless dates are cast as dates
 death_lag = 15
 d$cfr_lagged = NA
 d$cfr_lagged[-c(1:death_lag)] = tail(d$new_deaths_smoothed_per_million, -death_lag)/head(d$new_cases_smoothed_per_million, -death_lag)
