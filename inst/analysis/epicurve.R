@@ -1,4 +1,6 @@
 
+require(data.table)
+
 # fetch the arguments from the command line, other than the script name
 .args <- commandArgs(trailingOnly = TRUE)
 
@@ -7,7 +9,7 @@ d <- readRDS(.args[1])
 tarfile <- tail(.args, 1)
 
 # Figure with case, death, and non-lagged CFR panels
-with(d[lag == 0], {
+with(subset(d, lag == 0), {
     png(tarfile, width=2400, height=1600, res=240)
     par(mfrow=c(3,1), mar=c(2,4,1,1))
 

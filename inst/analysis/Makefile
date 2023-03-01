@@ -39,7 +39,7 @@ $(PROCDIR)/owid-%_all.csv: $(RAWDIR)/$(notdir $(SRCURL)) | $(PROCDIR)
 
 $(PROCDIR)/owid-%.csv: $(PROCDIR)/owid-%_all.csv
 	@echo -n 'Extracting date, case, and death data ...'
-	cut -d',' -f4,12,13,15,16 $< > $@ # grab columns with date, smoothed cases per million, smoothed deaths per million
+	cut -d',' -f1,4,12,13,15,16 $< > $@ # grab columns with date, smoothed cases per million, smoothed deaths per million
 
 # you can write your own function definitions ...
 R = $(strip Rscript $^ $(1) $@)

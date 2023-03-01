@@ -27,13 +27,17 @@
 #' `dt`.
 #'
 #' @export
-#' @importFrom data.table as.data.table
+#' @importFrom data.table as.data.table rbindlist
 #' @examples
-#'
+#' require(seamsCFR)
+#' require(data.table)
+#' dt <- data.table(date = 1:100, cases = runif(100))
+#' dt[, deaths := cases * (runif(.N)*.1 + .1)]
+#' df <- lagged_cfr(dt, c(0, 10))
 lagged_cfr <- function(
   dt, lags
 ) {
   dt <- as.data.table(dt)
-  bycols <- names(dt)[!like(names(dt), c("date|cases|deaths"))]
-  return(dt[, rbindlist(lapply(lags, .inner_cfr, sub.dt = .SD)), by=bycols])
+  bycols <- names(dt)[!data.table::like(names(dt), c("date|cases|deaths"))]
+  return(dt[, rbindlist(lapply(lags, .inner_cfr, sub.dt = .SD)), by = bycols])
 }
