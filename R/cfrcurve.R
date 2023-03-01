@@ -1,9 +1,24 @@
 
+.inner_cfr <- function(lag, sub.dt) {
+  if (lag == 0) {
+    tmp <- sub.dt[,
+      .(date, lag = 0, cfr = deaths/cases),
+    ]
+  } else {
+    tmp <- sub.dt[
+      order(date),
+      .(date = head(date, -lag), lag = lag, cfr = tail(deaths, -lag)/head(cases, -lag))
+    ]
+  }
+  return(merge(tmp, sub.dt, by="date", all = TRUE)[!is.na(lag)])
+}
+
 #' Compute requested lagged CFRs
 #'
 #' @param dt a [data.table::as.data.table()] coerceable object. Should result in
 #' columns `date`, `cases`, `deaths` and possibly others. The other columns will
-#' be used as grouping variables.
+#' be used as grouping variables, except those matching the pattern
+#' `date|cases|deaths`.
 #'
 #' @param lags a positive integer vector; the lags to compute
 #'
@@ -19,7 +34,6 @@ lagged_cfr <- function(
   dt, lags
 ) {
   dt <- as.data.table(dt)
-  bycols <- setdiff(names(dt), c("date", "cases", "deaths"))
-# cfr_lagged = tail(new_deaths_smoothed_per_million, -lag)/head(new_cases_smoothed_per_million, -lag)
-  return(dt[, .SD[order(date), .(date, lag = 0, cfr = deaths/cases)], by=bycols])
+  bycols <- names(dt)[!like(names(dt), c("date|cases|deaths"))]
+  return(dt[, rbindlist(lapply(lags, .inner_cfr, sub.dt = .SD)), by=bycols])
 }
