@@ -8,13 +8,13 @@ FIGDIR ?= ./fig
 RAWDIR := $(DATADIR)/raw
 PROCDIR := $(DATADIR)/processed
 SRCURL := https://covid.ourworldindata.org/data/owid-covid-data.csv
-TAR ?= ZAF
+TARISO ?= ZAF
 
 # the first target in a makefile is the default target, so it good practice to highlight
 # skip this for now and come back to it after reading the rest of the file
 # this is also a pattern based target, but uses the patsubst function to generate the list of targets
 # this target doesn't have any rules, so it just triggers making its dependencies
-default: $(patsubst %,$(FIGDIR)/owid-epi-%.png,$(TAR)) $(patsubst %,$(FIGDIR)/owid-cfr-%.png,$(TAR))
+default: $(patsubst %,$(FIGDIR)/owid-epi-%.png,$(TARISO)) $(patsubst %,$(FIGDIR)/owid-cfr-%.png,$(TARISO))
 
 # this is a target - targets start with what will be made, followed by a colon, then what it depends on (nothing in this case)
 # then the steps to make the target
