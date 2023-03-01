@@ -1,6 +1,4 @@
 
-
-
 #' Compute requested lagged CFRs
 #'
 #' @param dt a [data.table::as.data.table()] coerceable object. Should result in
@@ -19,23 +17,8 @@
 lagged_cfr <- function(
   dt, lags
 ) {
-
-
+  dt <- as.data.table(dt)
+  bycols <- setdiff(names(dt), c("date", "cases", "deaths"))
+# cfr_lagged = tail(new_deaths_smoothed_per_million, -lag)/head(new_cases_smoothed_per_million, -lag)
+  return(dt[, .SD[order(date), .(date, lag = 0, cfr = deaths/cases)], by=bycols])
 }
-
-# multi-panel cfr plotter (with different lags)
-plot_lagged_cfr = function(data, lag, max_lag) with(data, {
-    xaxt = ifelse(lag==max_lag,'s','n')
-    xlim = c(date[max_lag+1], tail(date,1))
-    cfr_lagged = tail(new_deaths_smoothed_per_million, -lag)/head(new_cases_smoothed_per_million, -lag)
-    plot(date[-c(1:lag)], cfr_lagged,
-         type='l',
-         xlab='Case report date',
-         ylab=paste0('CFR (lag = ',lag,')'),
-         ylim=c(0.0, 0.4),
-         xaxt=xaxt,
-         xlim=xlim,
-         cex.axis=1.5,
-         cex.lab=1.5
-    )
-})

@@ -13,8 +13,10 @@ The core functionality is in `lagged_cfr()`. Briefly, it receives a data for cas
 This package also includes the analysis associated with XYZ. You can make a copy of this analysis with the following commands:
 
 ```
-> fpath <- system.file("analysis", package = "reuse_practical")
-> # ... TBD
+fpath <- system.file("analysis", package = "seamsCFR")
+npath <- "mynewdir"
+dir.create(npath, recursive = TRUE)
+file.copy(list.files(fpath, full.names = TRUE), npath, recursive = TRUE)
 ```
 
 Then you can run that analysis by navigating to that directory and invoking `$ make` at the command prompt. Note: this will download the Our World in Data snapshot, which is roughly 70 Mb.
