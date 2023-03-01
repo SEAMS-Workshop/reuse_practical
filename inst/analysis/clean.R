@@ -7,17 +7,21 @@ require(seamsCFR)
 
 # which are source data and target output figure
 d <- data.table::fread(.args[1])[
-  order(date), .(date, cases = new_cases_smoothed, deaths = new_deaths_smoothed), by=iso_code
+  order(date), .(date,
+    cases_raw = new_cases_per_million,
+    cases = new_cases_smoothed_per_million,
+    deaths_raw = new_deaths_per_million,
+    deaths = new_deaths_smoothed_per_million
+  ), by=iso_code
 ]
 tarfile <- tail(.args, 1)
 # we use `tail()` here, because we have adopted a pattern where the last
 # argument is always the target file. now, if we add additional arguments,
 # we don't have to change picking out the target file
 
-# convert date field, compute the crude CFR
-
+# compute lagged CFRs
 d <- seamsCFR::lagged_cfr(d, seq(0, 21, 7))
 
-# and now we just save the data in the R native format
+# save the data in the R native format
 # plotting will happen in a different script
 saveRDS(d, tarfile)

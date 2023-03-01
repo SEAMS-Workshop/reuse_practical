@@ -12,8 +12,9 @@
 #' `dt`.
 #'
 #' @export
+#' @importFrom data.table as.data.table
 #' @examples
-#' # TODO
+#'
 lagged_cfr <- function(
   dt, lags
 ) {
